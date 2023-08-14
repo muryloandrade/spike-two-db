@@ -14,8 +14,6 @@ func HelloWorld(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetDatabaseOne(w http.ResponseWriter, r *http.Request) {
-	database.ConnectDB()
-
 	rows, err := database.DBONE.QueryContext(r.Context(), "SELECT * FROM users")
 	if err != nil {
 		log.Fatal("Error executing query:", err)
@@ -40,4 +38,32 @@ func GetDatabaseOne(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(users)
+}
+
+func GetDatabaseTwo(w http.ResponseWriter, r *http.Request) {
+	rows, err := database.DBTWO.QueryContext(r.Context(), "SELECT * FROM personalidades")
+
+	if err != nil {
+		log.Fatal("Error executing query:", err)
+	}
+	defer rows.Close()
+
+	var personalidades []entity.Personalidade // Assuming you have defined a User struct to represent the data
+
+	for rows.Next() {
+		var personalidade entity.Personalidade
+
+		err := rows.Scan(&personalidade.Id, &personalidade.Nome, &personalidade.Historia) // Scan column values into struct fields
+		if err != nil {
+			log.Fatal("Error scanning row:", err)
+		}
+
+		personalidades = append(personalidades, personalidade)
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Fatal("Error after iterating through rows:", err)
+	}
+
+	json.NewEncoder(w).Encode(personalidades)
 }
