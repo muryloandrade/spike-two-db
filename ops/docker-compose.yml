@@ -1,0 +1,31 @@
+version: "3"
+services:
+  postgres1:
+    container_name: postgres1
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=root
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./ops/migration/db-personalidade.sql:/docker-entrypoint-initdb.d/db-script.sql
+  postgres2:
+    container_name: postgres2
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=root
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./ops/migration/db-users.sql:/docker-entrypoint-initdb.d/db-users.sql
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "root@email.com"
+      PGADMIN_DEFAULT_PASSWORD: "123456"
+    ports:
+      - "54321:80"
