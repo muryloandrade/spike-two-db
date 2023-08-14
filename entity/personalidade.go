@@ -1,4 +1,4 @@
-package models
+package entity
 
 type Personalidade struct {
 	Id       int    `json:"id"`
