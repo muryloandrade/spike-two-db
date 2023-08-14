@@ -4,14 +4,25 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+
+	_ "github.com/lib/pq" // Import necessário para o driver PostgreSQL
 )
 
 var db *sql.DB
 
 func ConnectDB() *sql.DB {
-	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/go_db")
+	var (
+		host     = "localhost"
+		port     = 5433
+		dbname   = "root"
+		user     = "root"
+		password = "root"
+	)
 
-	if err != nil {
+	dsn := fmt.Sprintf("host=%s port=%d dbname=%s user=%s password=%s sslmode=disable", host, port, dbname, user, password)
+	db, err := sql.Open("postgres", dsn)
+
+	if err = db.Ping(); err != nil {
 		log.Fatal(err)
 	}
 
