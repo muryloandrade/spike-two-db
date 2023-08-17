@@ -10,7 +10,7 @@ services:
     ports:
       - "172.20.120.180:5432:5432"
     volumes:
-      - ./migration/db-script.sql:/docker-entrypoint-initdb.d/db-script.sql
+      - ./migration/db-personalidade.sql:/docker-entrypoint-initdb.d/db-personalidade.sql
   postgres2:
     container_name: postgres2
     image: postgres:latest
